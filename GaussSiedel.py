@@ -3,16 +3,6 @@ check dominant diagonal
 '''
 
 
-def dominant_diagonal(A):
-    for line in range(len(A)):
-        sum_values = 0
-        for column in range(len(A)):
-            if line != column:
-                sum_values += abs(A[line][column])
-        if A[line][line] < sum_values:
-            return False
-    return True
-
 
 def sum_line_values(matrix,lineIndex):
     sum_line = 0
@@ -47,14 +37,47 @@ def find_max_of_column(matrix):
 
 
     return mat'''
+def order_matrix1(matrix, b):         # [[2,8,4],[0,4,5],[8,6,2]]
+    sun_sbs = 0
+    for i in range(len(matrix)):
+        sun_sbs = 0
+        for j in range(len(matrix)):
+            sun_sbs += abs(matrix[i][j])
+            if order_matrix():
+                matrix = swap_lines_of_matrix(matrix,i,j)
+                #להשתמש בפונקציה הםרגקר לבדוק את שאר השורות
 
 
 
 
+
+def order_matrix(matrix, b):    # [[2,8,4],[0,4,5],[8,6,2]]
+    j = 0
+    line_swap = 0
+    check = 0
+    num = 0
+    index = 0
+
+    while num != (pow(len(matrix),2) + len(matrix))/ 2:    # num = 3   #  matrix =[[8,6,2],[0,4,5],[2,8,4]]
+        while index != len(matrix):
+            line = matrix[index]
+            abs_list = list(map(abs, line))
+            if line[j] >= sum(abs_list) - abs(line[j]):
+                matrix = swap_lines_of_matrix(matrix,line_swap,check)    #(matrix,1,2)
+                b = swap_lines_of_matrix(b,line_swap,check)
+                line_swap += 1                         # 2
+            num += 1                                    # 5
+            check += 1                                   # 3
+            index += 1                                   # 3
+        index = len(matrix) - (check-j)                  # 1
+        j += 1                                           # 1
+        check = index
+
+    return matrix
 
 
 def swap_lines_of_matrix(matrix,index_line1,index_line2):
-    for column in range(len(matrix)):
+    for column in range(len(matrix[0])):
         temp_value = matrix[index_line2][column]
         matrix[index_line2][column] = matrix[index_line1][column]
         matrix[index_line1][column] = temp_value
@@ -82,12 +105,169 @@ def printmat(matrix):
     print('\n')
 
 def gauss_seidel(A,b):
-    if dominant_diagonal(A) == False:
+    if dominant_pivot(A) == False:
         A = find_max_of_column(A)
         printmat(A)
 
 
-A= [[2,10,4],[0,4,5],[4,2,0]]
+def dominant_pivot(matrix):
+    j = 0
+    counter = 0
+    for i in matrix:
+        abs_list = list(map(abs, i))
+        if i[j] > sum(abs_list) - abs(i[j]):
+            counter += 1
+        j += 1
+    return counter == len(matrix)
+'''while True:
+    choice = input("Choose an option for calculations: \n1.gauss-seidel\n2.jacobi\n")
+    if choice == '1':
+        print(gauss_seidel(a, b))
+        break;
+    elif choice == '2':
+        print(jacobi(a, b))
+        break;
+    else:
+        print("wrong input try again")'''
+
+
+def multiply_matrix(mat1, mat2):  # matrixes of n*n
+    new_mat = []  # contains the result of the multiplication
+    line_index = 0
+    vector_col = []
+    for line_mat1 in mat1:
+        temp_line_mat = []
+        for column in range(len(mat2[0])):
+            vector_col = []
+            for line in range(len(mat1)):
+                vector_col.append(mat2[line][column])
+            temp_line_mat.append(product_calculation(line_mat1, vector_col))
+        new_mat.append(temp_line_mat)
+    return new_mat
+
+
+def product_calculation(vector_line, vector_column):  # Multiply line and column
+    result = 0
+    for element in range(len(vector_line)):
+        result += vector_line[element] * vector_column[element]
+    return result
+
+
+def elementary_matrix(matrix):   # in order to find the invertable matrix
+    All_Elementary_matrix = {}
+    counter_for_elementary_matrix = 0
+    counter_for_elementary_operations1 = (pow(len(matrix), 2) + len(
+        matrix)) / 2  # In order to create an upper triangular form for matrix 3 *3 we operate 3+2+1 operations(sum of arithmetic progression)
+    while counter_for_elementary_matrix != counter_for_elementary_operations1:
+        for column in range(len(matrix)):
+            for line in range(len(matrix)):
+                if line == column and matrix[line][column] != 0:
+                    piv = 1 / matrix[line][column]
+                    elementary_mat = create_I_matrix(len(matrix))
+                    elementary_mat[line][column] = piv
+
+                    counter_for_elementary_matrix += 1
+                    All_Elementary_matrix[
+                        counter_for_elementary_matrix] = elementary_mat  # Enter new elementary matrix in the dictionary.
+
+                elif line != column and line > column:
+                    elementary_mat = create_I_matrix(len(matrix))
+                    piv = - matrix[line][column] / matrix[column][column]
+                    elementary_mat[line][column] = piv
+
+                    result_vector = multiply_matrix(elementary_mat, result_vector)
+                    counter_for_elementary_matrix += 1
+                    All_Elementary_matrix[counter_for_elementary_matrix] = elementary_mat
+    # Until here we receive an upper triangle matrix
+    counter_for_elementary_operations2 = ((pow(len(matrix), 2) + len(matrix)) / 2) - len(matrix)
+    counter_for_elementary_matrix2 = 0
+    while counter_for_elementary_matrix2 != counter_for_elementary_operations2:
+        for column in range(len(matrix) - 1, -1, -1):
+            for line in range(column - 1, -1, -1):
+                if line != column and line < column:
+                    elementary_mat = create_I_matrix(len(matrix))
+                    piv = - matrix[line][column] / matrix[column][column]
+                    elementary_mat[line][column] = piv
+
+                    counter_for_elementary_matrix2 += 1
+                    All_Elementary_matrix[
+                        counter_for_elementary_matrix + counter_for_elementary_matrix2] = elementary_mat
+    mat_i = create_I_matrix(len(matrix))
+    mat = create_I_matrix(len(matrix))
+    mat_w = create_I_matrix(len(matrix))
+    for i in range(len(All_Elementary_matrix) - 1, 0, -1):
+        mat_w = All_Elementary_matrix[i]
+        mat = multiply_matrix(mat, mat_w)
+    return mat
+
+
+
+
+def zero_matrix(matrix):
+    mat = []
+    for i in range(len(matrix)):
+        mat.append([0 for i in matrix])
+    return mat
+
+
+MAT = [[-1, -2, 5], [4, -1, 1], [1, 6, 2]]
+b = [[2], [4], [9]]
+D = zero_matrix(MAT)
+for i in range(len(MAT)):
+    D[i][i] = MAT[i][i]
+U = zero_matrix(MAT)
+L = zero_matrix(MAT)
+guess = zero_matrix(MAT)
+guess_next = zero_matrix(MAT)
+for i in range(len(MAT)):
+    for j in range(len(MAT)):
+        if i < j:
+            U[i][j] = MAT[i][j]
+        if j < i:
+            L[i][j] = MAT[i][j]
+invert_D = elementary_matrix(D)
+print(elementary_matrix(D))
+LU = zero_matrix(MAT)
+for i in range(len(MAT)):
+    for j in range(len(MAT)):
+        LU[i][j] = L[i][j] + U[i][j]
+G = multiply_matrix(invert_D, LU)
+H = multiply_matrix(invert_D, b)
+
+
+
+def gauss(matrix,b):
+    if dominant_pivot(matrix)==False:
+        print("no dominant diagonal-cant do gauss ")
+        matrix = order_matrix(matrix, b)
+
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if i != j:
+                f = b[i]- matrix[i][j]
+            f1 = lambda x, y, z: (b11 - y * y11 - z * z11) / x11
+
+    e=1
+    x0 = 0
+    y0 = 0
+    z0 = 0
+    while e>0.001:
+        x1 = f1(x0, y0, z0)
+        y1 = f2(x1, y0, z0)
+        z1 = f3(x1, y1, z0)
+        print('%0.5f\t%0.5f\t%0.5f\t' %(x1, y1, z1))
+        e= abs(x0 - x1)
+        x0 = x1
+        y0 = y1
+        z0 = z1
+
+    print('\nSolution: x=%0.5f, y=%0.5f and z = %0.5f\n' % (x1, y1, z1))
+
+
+A = [[2,8,4],[0,4,5],[8,6,2]]
 b= [[6],[2],[5]]
 
-print(gauss_seidel(A,b))
+print(order_matrix(A,b))
+print(b)
+
+
