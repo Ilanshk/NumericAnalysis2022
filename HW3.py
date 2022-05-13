@@ -54,32 +54,24 @@ def bisection(function, start_point, end_point):
     return a_n
 
 
-def newton(f, start, end):
-    x_r = start
-
-    x_next = x_r - (f(x_r) / f_prime(x_r))
+def newton(f, Df, x0, max_iter):
+    xn = x0
     iteration_counter = 0
-    while abs(x_r - x_next) > epsilon:
-        iteration_counter += 1
-        x_r = x_next
-        x_next = x_r - f(x_r) / f_prime(x_r)
-
-
-        '''fxn = f(xn)
+    while abs(xn - f(xn)) > epsilon and iteration_counter < 100:
+        fxn = f(xn)
         if abs(fxn) < epsilon:
             print('Found solution after', iteration_counter, 'iterations.')
             return xn
-        Dfxn = Df(xn)
-        if Dfxn == 0:
-            print('Zero derivative. No solution found.')
-            return None
-        iteration_counter += 1
-        xn = xn - fxn / Dfxn
+    Dfxn = Df(xn)
+    if Dfxn == 0:
+        print('Zero derivative. No solution found.')
+        return None
+    iteration_counter += 1
+    xn = xn - (fxn / Dfxn)
     print('Exceeded maximum iterations. No solution found.')
-    return None'''
-    if f(x_next) <= epsilon:
-        print("The result is:",x_next," which eas received after ",iteration_counter," iterations")
-    return x_next
+    return None
+
+
 
 
 
@@ -132,13 +124,13 @@ def switch_case(choise, start, end):
     elif choise == '2':
         while i < end:
             if f(i) * f(i + 0.1) < 0:
-                newton(f, i, i+0.1)
+                newton(f,f_prime ,i, 100)
             i = i + 0.10
         i = start
         value = 0
         while i < end:
             if f_prime(i) * f_prime(i + 0.1) < 0:
-                newton(f_prime, i, i+0.1)
+                newton(f,f_prime, i, 100)
                 '''if abs(f(value)) < epsilon:
                     print(value)'''
                 '''else:
