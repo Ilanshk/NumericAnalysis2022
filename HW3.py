@@ -7,40 +7,39 @@ from sympy.utilities.lambdify import lambdify
 
 epsilon = 0.000001
 #print the derivative in a symbol way
-x = sp.symbols('x')
-my_f = x**4 + x**3- 3*x**2
+x =sp.symbols('x')
+my_f =x**4 +x**3 -3*x**2
 print("my_func: ", my_f)
 my_f1=sp.diff(my_f, x)
 print("f' : ", my_f1)
 
-d1 = sp.diff(my_f1)
+d1 = sp.diff(my_f1,x)
 print("f'': ", d1)
 
 #calc the derivative from func -> lambdify
-
-f = x**4 + x**3 - 3*x**2
+f = x**4 +x**3 -3*x**2
 f_prime = f.diff(x)
 print("f : ",f)
 print("f' : ",f_prime)
 f = lambdify(x, f)
 f_prime = lambdify(x, f_prime)
-#d1 = lambdify(x,d1)
+d1 = lambdify(x,d1)
 print("f(1):",f(1))
 print("f'(1):",f_prime(1))
+print("f''(1)",d1(1))
 
-
-def bisection(function, start_point, end_point):
+def bisection(f, start_point, end_point):
     a_n = start_point
     b_n = end_point
     counter = 0
     while abs(b_n - a_n) >= epsilon and counter < int((-1)*(mpmath.ln(epsilon/(end-start)))/mpmath.ln(2)-1):
         m_n = (a_n + b_n) / 2
-        f_m_n = function(m_n)
+        f_m_n = f(m_n)
         counter += 1
-        if function(a_n) * f_m_n < 0:
+        if f(a_n) * f_m_n < 0:
             # a_n = a_n  # אפשר למחוק?
             b_n = m_n
-        elif function(b_n) * f_m_n < 0:
+        elif f(b_n) * f_m_n < 0:
             a_n = m_n
             # b_n = b_n # אפשר למחוק?
         elif f_m_n == 0:
@@ -54,25 +53,23 @@ def bisection(function, start_point, end_point):
     return a_n
 
 
+
 def newton(f, Df, x0, max_iter):
     xn = x0
     iteration_counter = 0
-    while abs(xn - f(xn)) > epsilon and iteration_counter < 100:
+    while abs(xn-f(xn)) > epsilon and iteration_counter < 100:
         fxn = f(xn)
         if abs(fxn) < epsilon:
             print('Found solution after', iteration_counter, 'iterations.')
             return xn
-    Dfxn = Df(xn)
-    if Dfxn == 0:
-        print('Zero derivative. No solution found.')
-        return None
-    iteration_counter += 1
-    xn = xn - (fxn / Dfxn)
+        Dfxn = Df(xn)
+        if Dfxn == 0:
+            print('Zero derivative. No solution found.')
+            return None
+        iteration_counter += 1
+        xn = xn - (fxn / Dfxn)
     print('Exceeded maximum iterations. No solution found.')
     return None
-
-
-
 
 
 def secant(f, x0, x1):
@@ -118,23 +115,28 @@ def switch_case(choise, start, end):
                 if abs(f(value)) < epsilon:
                     print(value)
                 else:
-                    print("Wrong result- derivative is zero , but not the function")
-            i += 0.1
+                    print("Wrong result")
+                #print(bisection(f_prime, i, i+0.1))
+                    #print(bisection(f_prime,i,i+0.1))
+            i = i + 0.1
 
     elif choise == '2':
         while i < end:
             if f(i) * f(i + 0.1) < 0:
-                newton(f,f_prime ,i, 100)
+                print(newton(f, f_prime, i, 100))
             i = i + 0.10
         i = start
         value = 0
         while i < end:
             if f_prime(i) * f_prime(i + 0.1) < 0:
-                newton(f,f_prime, i, 100)
-                '''if abs(f(value)) < epsilon:
-                    print(value)'''
-                '''else:
-                    print("Wrong result")'''
+                value = newton(f_prime,d1,i,100)
+                if value is None:
+                    exit(1)
+
+                if abs(f_prime(value)) < epsilon:
+                    print(value,"zero point", f_prime(value))
+                else:
+                    print("Wrong result")
                 # print(bisection(f_prime, i, i+0.1))
                 # print(bisection(f_prime,i,i+0.1))
             i = i + 0.1
