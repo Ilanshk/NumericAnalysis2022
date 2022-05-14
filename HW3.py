@@ -81,21 +81,22 @@ def secant(f, x0, x1):
             denominator = float(f_x1 - f_x0) / (x1 - x0)
             x = x1 - float(f_x1) / denominator
         except ZeroDivisionError:
-            print("Error! - denominator zero for x = ", x)
+            print( "Error! - denominator zero for x = ", x)
             sys.exit(1)  # Abort with error
         x0 = x1
         x1 = x
         f_x0 = f_x1
         f_x1 = f(x1)
         iteration_counter += 1
-        # Here, either a solution is found, or too many iterations
+    # Here, either a solution is found, or too many iterations
     if abs(f_x1) > epsilon:
         iteration_counter = -1
     if iteration_counter > 0:  # Solution found
         print("Number of function calls: %d" % (2 + iteration_counter))
-        print("A solution is: %f" % (x))
+        return x
     else:
         print("Solution not found!")
+
 
 
 # switch_case
@@ -132,9 +133,8 @@ def switch_case(choise, start, end):
                 value = newton(f_prime,d1,i,100)
                 if value is None:
                     exit(1)
-
                 if abs(f_prime(value)) < epsilon:
-                    print(value,"zero point", f_prime(value))
+                    print(value,"is ~ zero point", f_prime(value))
                 else:
                     print("Wrong result")
                 # print(bisection(f_prime, i, i+0.1))
@@ -143,7 +143,18 @@ def switch_case(choise, start, end):
     elif choise == '3':
         while i < end:
             if f(i) * f(i + 0.1) < 0:
-                secant(f, i, i+0.1)
+                solution = secant(f, i, i + 0.1)
+                print("A solution is: %f" % (solution))
+            i = i + 0.1
+        i = start
+        while i < end:
+            if f_prime(i) * f_prime(i + 0.1) < 0:
+                solution = secant(f_prime, i, i + 0.1)
+                if solution is None:
+                    exit(1)
+                if abs(f(solution)) < 1.0e-6:
+                    print("A solution prime is: %f" % (solution))
+                    print(solution, "is ~ zero point", f(solution))
             i = i + 0.1
     else:
         print("Bad Choise")
