@@ -104,6 +104,8 @@ def switch_case(choise, start, end):
     i = start
     #1 for Bisection,2 for  Newton Rapson , 3 for secant
     if choise == '1':
+        if f(0) == 0:
+            print("A solution: ",f(0))
         while i < end:
             if f(i) * f(i + 0.1) < 0:
                 print(bisection(f, i, i+0.1))
@@ -114,14 +116,16 @@ def switch_case(choise, start, end):
             if f_prime(i) * f_prime(i+0.1) < 0:
                 value = bisection(f_prime,i,i+0.1)
                 if abs(f(value)) < epsilon:
-                    print(value)
+                    print(value,"is ~ zero point", f(value))
                 else:
-                    print("Wrong result")
+                    print("The derivative is zero, but the value of the function is different than zero")
                 #print(bisection(f_prime, i, i+0.1))
                     #print(bisection(f_prime,i,i+0.1))
             i = i + 0.1
 
     elif choise == '2':
+        if f(0) == 0:
+            print("A solution: ",f(0))
         while i < end:
             if f(i) * f(i + 0.1) < 0:
                 print(newton(f, f_prime, i, 100))
@@ -136,11 +140,13 @@ def switch_case(choise, start, end):
                 if abs(f_prime(value)) < epsilon:
                     print(value,"is ~ zero point", f_prime(value))
                 else:
-                    print("Wrong result")
+                    print("The derivative is zero, but the value of the function is different than zero")
                 # print(bisection(f_prime, i, i+0.1))
                 # print(bisection(f_prime,i,i+0.1))
             i = i + 0.1
     elif choise == '3':
+        if f(0) == 0:
+            print("A solution: ",f(0))
         while i < end:
             if f(i) * f(i + 0.1) < 0:
                 solution = secant(f, i, i + 0.1)
@@ -156,6 +162,7 @@ def switch_case(choise, start, end):
                     print("A solution prime is: %f" % (solution))
                     print(solution, "is ~ zero point", f(solution))
             i = i + 0.1
+
     else:
         print("Bad Choise")
 
