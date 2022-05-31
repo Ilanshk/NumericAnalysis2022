@@ -110,15 +110,7 @@ def gauss_seidel(A,b):
         printmat(A)
 
 
-def dominant_pivot(matrix):
-    j = 0
-    counter = 0
-    for i in matrix:
-        abs_list = list(map(abs, i))
-        if i[j] > sum(abs_list) - abs(i[j]):
-            counter += 1
-        j += 1
-    return counter == len(matrix)
+
 '''while True:
     choice = input("Choose an option for calculations: \n1.gauss-seidel\n2.jacobi\n")
     if choice == '1':
@@ -175,7 +167,7 @@ def elementary_matrix(matrix):   # in order to find the invertable matrix
                     piv = - matrix[line][column] / matrix[column][column]
                     elementary_mat[line][column] = piv
 
-                    result_vector = multiply_matrix(elementary_mat, result_vector)
+                    #result_vector = multiply_matrix(elementary_mat, result_vector)
                     counter_for_elementary_matrix += 1
                     All_Elementary_matrix[counter_for_elementary_matrix] = elementary_mat
     # Until here we receive an upper triangle matrix
@@ -201,7 +193,15 @@ def elementary_matrix(matrix):   # in order to find the invertable matrix
     return mat
 
 
-
+def dominant_pivot(matrix):
+    j = 0
+    counter = 0
+    for i in matrix:
+        abs_list = list(map(abs, i))
+        if abs(i[j]) >= sum(abs_list) - abs(i[j]):
+            counter += 1
+        j += 1
+    return counter == len(matrix)
 
 def zero_matrix(matrix):
     mat = []
@@ -211,7 +211,7 @@ def zero_matrix(matrix):
 
 
 MAT = [[-1, -2, 5], [4, -1, 1], [1, 6, 2]]
-b = [[2], [4], [9]]
+#b = [[2], [4], [9]]
 D = zero_matrix(MAT)
 for i in range(len(MAT)):
     D[i][i] = MAT[i][i]
@@ -225,49 +225,51 @@ for i in range(len(MAT)):
             U[i][j] = MAT[i][j]
         if j < i:
             L[i][j] = MAT[i][j]
-invert_D = elementary_matrix(D)
+'''invert_D = elementary_matrix(D)
 print(elementary_matrix(D))
 LU = zero_matrix(MAT)
 for i in range(len(MAT)):
     for j in range(len(MAT)):
         LU[i][j] = L[i][j] + U[i][j]
 G = multiply_matrix(invert_D, LU)
-H = multiply_matrix(invert_D, b)
+H = multiply_matrix(invert_D, b)'''
 
 
 
 def gauss(matrix,b):
+
     if dominant_pivot(matrix)==False:
         print("no dominant diagonal-cant do gauss ")
         matrix = order_matrix(matrix, b)
-
+    x = [0 for i in range(len(matrix))]
+    temp[0]
+    e = 1
+    A = []
     for i in range(len(matrix)):
-        for j in range(len(matrix)):
-            if i != j:
-                f = b[i]- matrix[i][j]
-            f1 = lambda x, y, z: (b11 - y * y11 - z * z11) / x11
+        x[i] = matrix[i][i]
+    guess = 0
+    while e > 0.000001:
+        for k in range(len(matrix)):
+            temp = f
+            for i in range(len(matrix)):
+                x1 = [0 for i in range(len(matrix))]
+                f = b[i][0]
+                for j in range(len(matrix)):
+                    if i != j:
+                        f -= matrix[i][j]*x[i][j]
+                f /= matrix[i][i]
+                x1[k] = f
+            A.append(x1)
+        print(A)
+        e = abs(x1[0]-temp[0])
 
-    e=1
-    x0 = 0
-    y0 = 0
-    z0 = 0
-    while e>0.001:
-        x1 = f1(x0, y0, z0)
-        y1 = f2(x1, y0, z0)
-        z1 = f3(x1, y1, z0)
-        print('%0.5f\t%0.5f\t%0.5f\t' %(x1, y1, z1))
-        e= abs(x0 - x1)
-        x0 = x1
-        y0 = y1
-        z0 = z1
-
-    print('\nSolution: x=%0.5f, y=%0.5f and z = %0.5f\n' % (x1, y1, z1))
+            #guess = f
+        #e = abs(f-guess)
+Matrix = [[64,16,4,1],[27,9,3,1],[8,4,2,1],[1,1,1,1]]
+b = [[4],[3],[2],[1]]
+gauss(Matrix,b)
 
 
-A = [[2,8,4],[0,4,5],[8,6,2]]
-b= [[6],[2],[5]]
 
-print(order_matrix(A,b))
-print(b)
 
 
