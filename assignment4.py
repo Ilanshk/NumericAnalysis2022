@@ -39,7 +39,9 @@ def lagrange(point, x):
     return sum
 
 
-# def nevil():
+def nevil(point,x):
+
+
 
 
 
