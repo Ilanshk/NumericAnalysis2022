@@ -1,4 +1,4 @@
-point= {1:1, 2: 0, 4: 1.5}
+point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
 keys = list(point.keys())
 All_Elementary_matrix= {}
 
@@ -40,6 +40,22 @@ def lagrange(point, x):
 
 
 def nevil(point,x):
+    keyspnm = list(point.keys())
+    y= []
+    for i in range(len(keyspnm)):
+        y.append(point[ keyspnm[i]])
+    pnm = y.copy()
+    counter = 1
+    for i in range(len(keyspnm) - 1):
+        temp =[]
+        for j in range(len(keyspnm)-counter):
+            temp.append(((x- keyspnm[j])*pnm[j+1]-(x -keyspnm[j+counter])*pnm[j])/(keyspnm[j+counter]-keyspnm[j]))
+        pnm = temp.copy()
+        counter+=1
+    return pnm[0]
+
+
+
 
 
 
@@ -236,4 +252,4 @@ D = create_I_matrix(len(MAT))
 for i in range(len(MAT)):
     D[i][i] = MAT[i][i]
 
-print(lagrange(point,3))
+print(nevil(point,1.28))
