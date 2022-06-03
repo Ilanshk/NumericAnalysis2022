@@ -1,6 +1,6 @@
 #point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
 import math
-point = {math.pi/6:0.5,math.pi/4:0.7072,math.pi/2:1}
+point = {0:0,math.pi/6:0.5,math.pi/4:0.7072,math.pi/2:1}
 keys = list(point.keys())
 All_Elementary_matrix= {}
 
@@ -57,33 +57,33 @@ def nevil(point,x):
     return pnm[0]
 
 
-
 def spline(point, x):
-    matrix = []
     y = [point[keys[i]] for i in range(len(point))]
     h = [(keys[i + 1] - keys[i]) for i in range(len(point)-1)]
     l = [h[i]/(h[i-1]+h[i]) for i in range(1,len(h))]
     m = [1-l[i] for i in range(len(l))]
-    d = [6/(h[i-1]+h[i])*((y[i+1]-y[i])/h[i])-((y[i]-y[i-1])/h[i-1]) for i in range(1,len(h))]
-    matrix = create_I_matrix(len(point))
-    for i in range(len(point)): # הצבת 2
+    d = [[(6/(h[i-1]+h[i]))*(((y[i+1]-y[i])/h[i])-((y[i]-y[i-1])/h[i-1]))] for i in range(1,len(h))]
+    matrix = create_I_matrix(len(point)-2)
+    for i in range(len(matrix)): # הצבת 2
         matrix[i][i] = 2
-    for j in range(1,len(point)) : # הצבת ה m
-        for k in range(len(point)):
-            matrix[j-1][k] = m[k]
-    for line in range(len(point)-1) :  # הצבת ה l
-        for col in range(1,len(point)):
+    for j in range(1,len(matrix)) : # הצבת ה m
+        for k in range(len(matrix)-1):
+            matrix[j][k] = m[k+1]
+    for line in range(len(matrix)-1):  # הצבת ה l
+        for col in range(1,len(matrix)):
             matrix[line][col] = l[line]
-    print("d",d)
-    print(matrix)
 
-
-spline(point,math.pi/3)
-
-
-
-
-
+    M = elementary_matrix(matrix,d)
+    print(M)
+    for t in range(len(keys)):
+        if keys[t] < x:
+            lower_p = t
+    M = [[0]]+M+[[0]]  # the second derivative of the points in the upper and lower bounderies are equal to 0.
+    a = ((((pow((keys[lower_p+1]-x),3))*M[lower_p][0])+((pow((x-keys[lower_p]),3))*M[lower_p+1][0]))/(6*h[lower_p]))
+    b = (((keys[lower_p+1]-x)*y[lower_p])+((x-keys[lower_p])*y[lower_p+1]))/h[lower_p]
+    c = ((((keys[lower_p+1]-x)*M[lower_p][0])+((x-keys[lower_p])*M[lower_p+1][0]))*h[lower_p])/6
+    s = a+b-c
+    return s
 
 
 
@@ -276,5 +276,8 @@ else:
 D = create_I_matrix(len(MAT))
 for i in range(len(MAT)):
     D[i][i] = MAT[i][i]
-
-print(nevil(point,1.28))
+print("liniar", liniar(keys[0],keys[3],1,point))
+print("polinomit", polinomit(point,1))
+print("lagrange", lagrange(point,1))
+print("nevil", nevil(point,1))
+print("spline", spline(point,1))
