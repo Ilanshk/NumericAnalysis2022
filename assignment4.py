@@ -1,4 +1,6 @@
-point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
+#point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
+import math
+point = {math.pi/6:0.5,math.pi/4:0.7072,math.pi/2:1}
 keys = list(point.keys())
 All_Elementary_matrix= {}
 
@@ -54,6 +56,29 @@ def nevil(point,x):
         counter+=1
     return pnm[0]
 
+
+
+def spline(point, x):
+    matrix = []
+    y = [point[keys[i]] for i in range(len(point))]
+    h = [(keys[i + 1] - keys[i]) for i in range(len(point)-1)]
+    l = [h[i]/(h[i-1]+h[i]) for i in range(1,len(h))]
+    m = [1-l[i] for i in range(len(l))]
+    d = [6/(h[i-1]+h[i])*((y[i+1]-y[i])/h[i])-((y[i]-y[i-1])/h[i-1]) for i in range(1,len(h))]
+    matrix = create_I_matrix(len(point))
+    for i in range(len(point)): # הצבת 2
+        matrix[i][i] = 2
+    for j in range(1,len(point)) : # הצבת ה m
+        for k in range(len(point)):
+            matrix[j-1][k] = m[k]
+    for line in range(len(point)-1) :  # הצבת ה l
+        for col in range(1,len(point)):
+            matrix[line][col] = l[line]
+    print("d",d)
+    print(matrix)
+
+
+spline(point,math.pi/3)
 
 
 
