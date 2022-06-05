@@ -5,14 +5,11 @@ keys = list(point.keys())
 All_Elementary_matrix= {}
 
 def liniar(p1,p2, x,point):
-    f = (( point[p1]-point[p2])/(p1-p2))*x +(p1*point[p2]-p2*point[p1])/(p1-p2)
+    f = ((point[p1]-point[p2])/(p1-p2))*x+(p1*point[p2]-p2*point[p1])/(p1-p2)
     return f
 def polinomit(point,x):
-    result = [[0 for j in range(1)] for i in range(len(point))]
     matrix =[[0 for j in range(len(point))]for i in range(len(point))]
-    print(matrix)
     keys = list(point.keys())
-    print(keys)
     for j in range(len(point)):
         for i in range(len(point)):
             if j == 0:
@@ -23,11 +20,10 @@ def polinomit(point,x):
     for i in range(len(matrix)):
         b[i][0] = point[keys[i]]
     result = elementary_matrix(matrix,b)
-    print(result)
     f = 0
     for k in range(len(result)):
         f += result[k][0]*pow(x,k)
-    print("f(x) = ", f)
+    return f
 
 def lagrange(point, x):
     L_I = 1
@@ -72,9 +68,7 @@ def spline(point, x):
     for line in range(len(matrix)-1):  # הצבת ה l
         for col in range(1,len(matrix)):
             matrix[line][col] = l[line]
-
     M = elementary_matrix(matrix,d)
-    print(M)
     for t in range(len(keys)):
         if keys[t] < x:
             lower_p = t
@@ -97,29 +91,8 @@ def printmat(matrix):
     print('\n')
 
 
-def minor_of_an_item_in_the_matrix(mat, line, column):
-    temp_matrix = []
-    for my_line in range(len(mat)):
-        matrix_line = []
-        for my_column in range(len(mat)):
-            if my_line != line and my_column != column:
-                matrix_line.append(mat[my_line][my_column])
-        temp_matrix.append(matrix_line)
-    return list(filter(lambda x: x != [], temp_matrix))
 
 
-def find_determinanta_of_matrix(matrix):
-    determinanta = 0
-    sign = -1
-    line = 0
-    column = 0
-    if len(matrix) == 2:
-        return matrix[0][0] * matrix[1][1] - matrix[0][1] * matrix[1][0]
-    for line_value in matrix[0]:
-        determinanta += pow(sign, (line + column)) * line_value * find_determinanta_of_matrix(
-            minor_of_an_item_in_the_matrix(matrix, line, column))
-        column += 1
-    return determinanta
 
 
 def product_calculation(vector_line, vector_column):  # Multiply line and column
@@ -196,20 +169,7 @@ def find_max_of_column(matrix, j):
 
 
 def print_state(elementary, matrix):
-    print("elementary:   ")
-    print("\n")
-    printmat(elementary)
-    print("\n")
-    print("matrix:   \n")
-    print("")
-    printmat(matrix)
-    print("\n")
-    print("result:   ")
-    print("\n")
-    result = multiply_matrix(elementary, matrix)
-    printmat(result)
-    print("\n")
-    return result
+    return multiply_matrix(elementary, matrix)
 
 
 def elementary_matrix(matrix, result_vector):
@@ -265,17 +225,8 @@ def elementary_matrix(matrix, result_vector):
     return result_vector
 
 
-
-
-MAT = [[-1, -2, 5], [4, -1, 1], [1, 6, 2]]
-'''if find_determinanta_of_matrix(MAT) == 0:
-    print('Not invertable')
-else:
-   elementary_matrix( [[-1, -2, 5], [4, -1, 1], [1, 6, 2]], [[2], [4], [9]])
-'''
-D = create_I_matrix(len(MAT))
-for i in range(len(MAT)):
-    D[i][i] = MAT[i][i]
+point("Enter  how  point do need  ")
+input()
 print("liniar", liniar(keys[0],keys[3],1,point))
 print("polinomit", polinomit(point,1))
 print("lagrange", lagrange(point,1))
