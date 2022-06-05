@@ -1,7 +1,8 @@
-#point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
-import math
-point = {0:0,math.pi/6:0.5,math.pi/4:0.7072,math.pi/2:1}
-keys = list(point.keys())
+''' Ilan Shklover 206753550
+Shira Cohen 211777834
+Eli Ben Aharon 311614853
+'''
+
 All_Elementary_matrix= {}
 
 def liniar(p1,p2, x,point):
@@ -26,6 +27,7 @@ def polinomit(point,x):
     return f
 
 def lagrange(point, x):
+    keys = list(point.keys())
     L_I = 1
     sum = 0
     for i in range(len(point)):
@@ -38,6 +40,7 @@ def lagrange(point, x):
 
 
 def nevil(point,x):
+    keys = list(point.keys())
     keyspnm = list(point.keys())
     y= []
     for i in range(len(keyspnm)):
@@ -54,6 +57,7 @@ def nevil(point,x):
 
 
 def spline(point, x):
+    keys = list(point.keys())
     y = [point[keys[i]] for i in range(len(point))]
     h = [(keys[i + 1] - keys[i]) for i in range(len(point)-1)]
     l = [h[i]/(h[i-1]+h[i]) for i in range(1,len(h))]
@@ -69,6 +73,7 @@ def spline(point, x):
         for col in range(1,len(matrix)):
             matrix[line][col] = l[line]
     M = elementary_matrix(matrix,d)
+    lower_p = 0
     for t in range(len(keys)):
         if keys[t] < x:
             lower_p = t
@@ -225,10 +230,12 @@ def elementary_matrix(matrix, result_vector):
     return result_vector
 
 
-point("Enter  how  point do need  ")
-input()
-print("liniar", liniar(keys[0],keys[3],1,point))
-print("polinomit", polinomit(point,1))
-print("lagrange", lagrange(point,1))
-print("nevil", nevil(point,1))
-print("spline", spline(point,1))
+
+point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
+keys = list(point.keys())
+x = 1
+print("liniar", liniar(keys[0],keys[3],x,point))
+print("polinomit", polinomit(point,x))
+print("lagrange", lagrange(point,x))
+print("nevil", nevil(point,x))
+print("spline", spline(point,x))
