@@ -82,13 +82,13 @@ def swap_lines_of_matrix(matrix,index_line1,index_line2):
 def check_column_in_matrix(matrix,some_col):
     for line in range(len(matrix)):
         if matrix[line][some_col] !=0:
-            return true # The column is not full of 0's
-    return false # The column is full of 0's
+            return True  # The column is not full of 0's
+    return False  # The column is full of 0's
 
 def swap_columns_of_matrix(matrix,index_column1): #'matrix' is a matrix that has a column full of 0's.
     last_column = len(matrix) - 1
     for column in range(last_column,index_column1,1):
-        if check_column_in_matrix(matrix,column) == true:
+        if check_column_in_matrix(matrix,column) == True:
             for line in range(len(matrix)):
                 matrix[line][index_column1] = matrix[line][last_column]
             for index in range(len(matrix)):
@@ -188,13 +188,28 @@ def elementary_matrix(matrix,result_vector):
                         swap_columns_of_matrix(matrix,column)
                 elif line != column and line > column:
                     elementary_mat = create_I_matrix(len(matrix))
-                    piv = -()
+                    piv = -matrix[line][column] / matrix[column][column]
                     val_for_mat_elementary = elementary_mat[line][column] - matrix[line][column]
                     elementary_mat[line][column] = val_for_mat_elementary
                     matrix = print_state(elementary_mat,matrix)
                     result_vector = multiply_matrix(elementary_mat,result_vector)
                     counter_for_elementary_matrix += 1
                     All_Elementary_matrix[counter_for_elementary_matrix] = elementary_mat
+    counter_for_elementary_operations2 = ((pow(len(matrix), 2) + len(matrix)) / 2) - len(matrix)
+    counter_for_elementary_matrix2 = 0
+    while counter_for_elementary_matrix2 != counter_for_elementary_operations2:
+        for column in range(len(matrix) - 1, -1, -1):
+            for line in range(column - 1, -1, -1):
+                if line != column and line < column:
+                    elementary_mat = create_I_matrix(len(matrix))
+                    piv = - matrix[line][column] / matrix[column][column]
+                    elementary_mat[line][column] = piv
+                    matrix = print_state(elementary_mat, matrix)
+                    result_vector = multiply_matrix(elementary_mat, result_vector)
+                    counter_for_elementary_matrix2 += 1
+                    All_Elementary_matrix[
+                        counter_for_elementary_matrix + counter_for_elementary_matrix2] = elementary_mat
+
 
     print("Results:")
     printmat(result_vector)
