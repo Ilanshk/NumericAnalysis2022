@@ -55,9 +55,23 @@ def simpson(f,a,b,n):
 
 
 
+x = sp.symbols('x')
+my_f = (sp.cos(2*(math.e**((-2)*x))))/(x**2+5*x+6)
+print("my_func: ", my_f)
+my_f1= sp.diff(my_f, x)
+#print("f' : ", my_f1)
 
+d1 = sp.diff(my_f1,x)
+#print("f'': ", d1)
 
-f = lambda x:sp.sin(x)
-print(trapez(f,0,math.pi,find_number_of_partitions(0,math.pi)))
-print(simpson(f,0,math.pi,4))
+#calc the derivative from func -> lambdify
+f = (sp.cos(2*(math.e**((-2)*x))))/(x**2+5*x+6)
+f_prime = f.diff(x)
+print("f : ",f)
+#print("f' : ",f_prime)
+f = lambdify(x, f)
+f_prime = lambdify(x, f_prime)
+d1 = lambdify(x,d1)
+#print(trapez(f,0,math.pi,find_number_of_partitions(0,math.pi)))
+print(simpson(f,-0.4,0.4,10))
 

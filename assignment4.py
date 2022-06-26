@@ -24,6 +24,7 @@ def polinomit(point,x):
     f = 0
     for k in range(len(result)):
         f += result[k][0]*pow(x,k)
+        #print(f)
     return f
 
 def lagrange(point, x):
@@ -50,6 +51,7 @@ def nevil(point,x):
     for i in range(len(keyspnm) - 1):
         temp =[]
         for j in range(len(keyspnm)-counter):
+            print(((x- keyspnm[j])*pnm[j+1]-(x -keyspnm[j+counter])*pnm[j])/(keyspnm[j+counter]-keyspnm[j]))
             temp.append(((x- keyspnm[j])*pnm[j+1]-(x -keyspnm[j+counter])*pnm[j])/(keyspnm[j+counter]-keyspnm[j]))
         pnm = temp.copy()
         counter+=1
@@ -231,11 +233,11 @@ def elementary_matrix(matrix, result_vector):
 
 
 
-point= {1:0, 1.2: 0.11246, 1.3: 0.167996,1.4:0.222709}
+point= {0.35:-213.5991,0.4:-204.4416,0.55:-194.9375,0.65:-185.0256,0.7:-174.6711,0.85:-163.8656,0.9:-152.6271}
 keys = list(point.keys())
-x = 1
-print("liniar", liniar(keys[0],keys[3],x,point))
-print("polinomit", polinomit(point,x))
-print("lagrange", lagrange(point,x))
+x = 0.75
+#print("liniar", liniar(keys[0],keys[3],x,point))
+#print("polinomit", polinomit(point,x))
+#print("lagrange", lagrange(point,x))
 print("nevil", nevil(point,x))
-print("spline", spline(point,x))
+#print("spline", spline(point,x))

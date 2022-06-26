@@ -1,3 +1,4 @@
+import math
 import sys
 
 import mpmath
@@ -7,26 +8,27 @@ from sympy.utilities.lambdify import lambdify
 
 epsilon = 0.000001
 #print the derivative in a symbol way
-x =sp.symbols('x')
-my_f =x**4 +x**3 -3*x**2
+x = sp.symbols('x')
+my_f = (sp.cos(2*(math.e**((-2)*x))))/(x**2+5*x+6)
 print("my_func: ", my_f)
-my_f1=sp.diff(my_f, x)
-print("f' : ", my_f1)
+my_f1= sp.diff(my_f, x)
+#print("f' : ", my_f1)
 
 d1 = sp.diff(my_f1,x)
-print("f'': ", d1)
+#print("f'': ", d1)
 
 #calc the derivative from func -> lambdify
-f = x**4 +x**3 -3*x**2
+f = (sp.cos(2*(math.e**((-2)*x))))/(x**2+5*x+6)
 f_prime = f.diff(x)
 print("f : ",f)
-print("f' : ",f_prime)
+#print("f' : ",f_prime)
 f = lambdify(x, f)
 f_prime = lambdify(x, f_prime)
 d1 = lambdify(x,d1)
-print("f(1):",f(1))
-print("f'(1):",f_prime(1))
-print("f''(1)",d1(1))
+
+#print("f(1):",f(1))
+#print("f'(1):",f_prime(1))
+#print("f''(1)",d1(1))
 
 def bisection(f, start_point, end_point):
     a_n = start_point
@@ -102,12 +104,11 @@ def secant(f, x0, x1):
 # switch_case
 def switch_case(choise, start, end):
     i = start
-    #1 for Bisection,2 for  Newton Rapson , 3 for secant
     if choise == '1':
         if f(0) == 0:
             print("A solution: ",f(0))
         while i < end:
-            if f(i) * f(i + 0.1) < 0:
+            if (f(i) * f(i + 0.1)) < 0:
                 print(bisection(f, i, i+0.1))
             i += 0.1
         i = start
@@ -122,10 +123,7 @@ def switch_case(choise, start, end):
                 #print(bisection(f_prime, i, i+0.1))
                     #print(bisection(f_prime,i,i+0.1))
             i = i + 0.1
-
     elif choise == '2':
-        if f(0) == 0:
-            print("A solution: ",f(0))
         while i < end:
             if f(i) * f(i + 0.1) < 0:
                 print(newton(f, f_prime, i, 100))
@@ -145,8 +143,6 @@ def switch_case(choise, start, end):
                 # print(bisection(f_prime,i,i+0.1))
             i = i + 0.1
     elif choise == '3':
-        if f(0) == 0:
-            print("A solution: ",f(0))
         while i < end:
             if f(i) * f(i + 0.1) < 0:
                 solution = secant(f, i, i + 0.1)
@@ -162,7 +158,6 @@ def switch_case(choise, start, end):
                     print("A solution prime is: %f" % (solution))
                     print(solution, "is ~ zero point", f(solution))
             i = i + 0.1
-
     else:
         print("Bad Choise")
 
@@ -170,7 +165,7 @@ def switch_case(choise, start, end):
 start = input("enter  start range: ")
 start = int(start)
 end = input("enter end range: ")
-end = int(end)
+end = int (end)
 choise = input(
     "In what method you interested in finding the roots of the equation \n1 for Bisection, 2 for  Newton Rapson , 3 for secant\nyour choise ? : ")
 switch_case(choise,start,end)
