@@ -8,23 +8,23 @@ start = 2.5 * math.pi
 end = 5.6 * math.pi
 n = 10
 
-def rumberg(polinom, start, end, n):
-    f = sp.lambdify(x, polinom)
+def rumberg(f, start, end, n):
+    function = sp.lambdify(x, f)
     i = 0
     RArray = []
     #Building R Vector
     while i < n:
         sum = 0
-        t = 0
+        power = 0
         if i != 0:
             end_of_sum = (2 ** i) - 1
             sum_section_size = (end - start) / (end_of_sum + 1)
             curr_point = start + sum_section_size
-            while t < end_of_sum:
-                sum += 2 * f(curr_point)
+            while power < end_of_sum:
+                sum += 2 * function(curr_point)
                 curr_point += sum_section_size
-                t += 1
-        sum = sum + f(start) + f(end)
+                power += 1
+        sum = sum + function(start) + function(end)
         RArray.append((end - start) * (0.5 ** (i + 1)) * sum)
         i += 1
     print("\n")
